@@ -1,46 +1,37 @@
-import cv2,os,sklearn,tqdm
-import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans,AgglomerativeClustering,MeanShift,SpectralClustering
-from utils import color
-from PIL import Image
+import numpy as np
+import random
+import cv2
+from numpy.random import randint as randint
+ 
+def ellipse(img):
+    h,w,c = img.shape
 
+    center_x = randint(w//2-10, high=w//2+10)  #随机绘制圆心
+    center_y = randint(h//2-10, high=h//2+10)
+    X = randint(360, 380)//2
+    Y = randint(460, 480)//2
+    # 参数 1.目标图片  2.椭圆圆心  3.长短轴长度  4.偏转角度  5.圆弧起始角度  6.终止角度  7.颜色  8.是否填充
+    cv2.ellipse(img, (center_x,center_y), (X,Y), randint(0,120), 0, 360, (255, 255, 255),-1)
 
-def Clustering(img_array,method="kmeans"):
-    h,w,c = img_array.shape
-
-    img_array =  img_array.reshape(-1,3).astype(np.uint8)
-    if method == "kmeans":
-        classifier = KMeans(n_clusters=2,n_init="auto",random_state=0,init='k-means++')
-    elif method == "AgglomerativeClustering":               # 不适用,计算量太大
-        classifier = AgglomerativeClustering(n_clusters=2)
-    elif method == "MeanShift":                             # 耗时过长
-        classifier = MeanShift(bandwidth=2)
-    elif method == "SpectralClustering":                    # 不适用,计算量太大
-        classifier = SpectralClustering(n_clusters=2)
-        
-    kmeans = classifier.fit(img_array)
-    img_label = kmeans.labels_
-    img_label = img_label.reshape(h,w)
-
-    return img_label
-
-
-
-
-img_file = r"D:\31890\Desktop\codefile\Utils\data"
-save_file = r'D:\31890\Desktop\codefile\Utils\result'
-
-if not os.path.exists(save_file):
-    os.makedirs(save_file)
-
-for name in tqdm.tqdm(os.listdir(img_file)):
-    image_path = os.path.join(img_file,name)
-    save_path = os.path.join(save_file,name)
-
-    image_array = cv2.imread(image_path)
-    img_label = Clustering(image_array,method="kmeans")
-    img_label = color(img_label,colormap=[0, 0, 0,255,255,255])
-    img_label.save(save_path)
-
-
+def main():
+    # 3.显示结果
+    number =15
+    max_shape=900
+    min_shape=670
+    for i in range(number):
+        img = np.ones((randint(min_shape, max_shape),randint(min_shape, max_shape) , 3), np.uint8)*0
+        ellipse(img)
+ 
+        imgpath = './fig/' + str(i) + '.jpg'
+        cv2.imwrite(imgpath, img)
+    #     plt.clf()
+    #     plt.close()
+ 
+    # cv2.imshow("img", img)
+    # cv2.waitKey()
+    # cv2.destroyAllWindows()
+ 
+ 
+if __name__ == '__main__':
+    main()
