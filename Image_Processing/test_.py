@@ -1,37 +1,32 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import random
-import cv2
-from numpy.random import randint as randint
+import shutil
+import os,tqdm,random
  
-def ellipse(img):
-    h,w,c = img.shape
+def remove_file(image_file, img_save_file):
+    filelist = os.listdir(image_file) 
+    for file in tqdm.tqdm(filelist):
+        for name in os.listdir(os.path.join(image_file,file)):
+            old_path = os.path.join(image_file,file,name)
+            new_path = os.path.join(img_save_file,name)
+            shutil.move(old_path, new_path)
 
-    center_x = randint(w//2-10, high=w//2+10)  #随机绘制圆心
-    center_y = randint(h//2-10, high=h//2+10)
-    X = randint(360, 380)//2
-    Y = randint(460, 480)//2
-    # 参数 1.目标图片  2.椭圆圆心  3.长短轴长度  4.偏转角度  5.圆弧起始角度  6.终止角度  7.颜色  8.是否填充
-    cv2.ellipse(img, (center_x,center_y), (X,Y), randint(0,120), 0, 360, (255, 255, 255),-1)
+def remove_file2(image_file, mask_file, img_save_file,mask_save_file):
+    filelist = os.listdir(image_file) 
+    val_List =random.sample(filelist,k = int(len(filelist)*0.2))
+    for name in tqdm.tqdm(val_List):
+        img_old_path = os.path.join(image_file,name)
+        img_new_path = os.path.join(img_save_file,name)
+        mask_old_path = os.path.join(mask_file,name.split('.jp')[0]+'.png')
+        mask_new_path = os.path.join(mask_save_file,name.split('.jp')[0]+'.png')
+        shutil.move(img_old_path, img_new_path)
+        shutil.move(mask_old_path, mask_new_path)
 
-def main():
-    # 3.显示结果
-    number =15
-    max_shape=900
-    min_shape=670
-    for i in range(number):
-        img = np.ones((randint(min_shape, max_shape),randint(min_shape, max_shape) , 3), np.uint8)*0
-        ellipse(img)
- 
-        imgpath = './fig/' + str(i) + '.jpg'
-        cv2.imwrite(imgpath, img)
-    #     plt.clf()
-    #     plt.close()
- 
-    # cv2.imshow("img", img)
-    # cv2.waitKey()
-    # cv2.destroyAllWindows()
- 
- 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    # image_file = r'D:\31890\Desktop\PRMI_official\test\masks_pixel_gt'
+    # img_save_file = r'D:\31890\Desktop\data\anno\test'
+    # remove_file(image_file, img_save_file)
+
+    image_file = r'D:\31890\Desktop\mseg_root_data\imgs\test'
+    mask_file =  r'D:\31890\Desktop\mseg_root_data\anno\test'
+    img_save_file = r'D:\31890\Desktop\mseg_mix_data\imgs\test'
+    mask_save_file = r'D:\31890\Desktop\mseg_mix_data\anno\test'
+    remove_file2(image_file,mask_file, img_save_file,mask_save_file)
