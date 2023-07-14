@@ -1,6 +1,6 @@
 import onnxruntime
 import numpy as np
-import torch,cv2,tqdm,time
+import torch,cv2,time,tqdm
 import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image

@@ -466,25 +466,33 @@ class SegFormer(nn.Module):
         
         return output
 
+def segformer_s(num_classes=2):
+
+    model = SegFormer(                             #    SegFormer         
+    num_classes = num_classes,                     # number of segmentation classes
+    pretrained = False
+    )
+
+    return model
+
 
 if __name__ =="__main__":
-    net = SegFormer(
+    net = segformer_s(
             num_classes = 2,
-            pretrained = False
             )
     
 
     from thop import profile
     x = torch.randn(2, 3, 512, 512)
 
-    # flops , params = profile(net,inputs=(x,))
-    # print(flops)
-    # print(params)
+    flops , params = profile(net,inputs=(x,))
+    print(flops)
+    print(params)
 
-    torch_out = torch.onnx.export(net,
-                            x,
-                            "model__/model_zoo/test.onnx",
-                            input_names=['input'],
-                            output_names=['output'],
-                            opset_version=11  #算子版本
-                            )
+    # torch_out = torch.onnx.export(net,
+    #                         x,
+    #                         "model__/model_zoo/test.onnx",
+    #                         input_names=['input'],
+    #                         output_names=['output'],
+    #                         opset_version=11  #算子版本
+    #                         )
