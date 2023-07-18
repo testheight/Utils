@@ -1,7 +1,7 @@
 import json,os,re
 import matplotlib.pyplot as plt
 
-json_path = r'D:\31890\Desktop\codefile\Utils\Packages\Read-log__\log\info.log'
+json_path = r'D:\31890\Desktop\codefile\Utils\Packages\Read_log__\log\info.log'
 with open(json_path, 'r',encoding='utf-8') as log_file:
     mean_l=[]
     list =[]
