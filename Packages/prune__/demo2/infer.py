@@ -11,4 +11,5 @@ model = TorchModel().to(device)
 print(model)
 
 model.to(device=device)                                                       # ---将网络拷贝到deivce中--#
-model.load_state_dict(torch.load('Packages\prune__\demo2\para3.pth',map_location=device))
+model=torch.load('Packages\prune__\demo2\para3.pt',map_location=device)
+print(model)

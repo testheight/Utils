@@ -4,14 +4,13 @@ from torch.optim import SGD
 
 from nni_assets.compression.mnist_model import TorchModel, trainer, evaluator, device
 
-# define the model
+# 定义模型
 model = TorchModel().to(device)
 
 # show the model structure, note that pruner will wrap the model layer.
 print(model)
 
 # define the optimizer and criterion for pre-training
-
 optimizer = SGD(model.parameters(), 1e-2)
 criterion = F.nll_loss
 
@@ -20,7 +19,7 @@ for epoch in range(3):
     trainer(model, optimizer, criterion)
     evaluator(model)
 
-torch.save(model.state_dict(),'Packages\prune__\demo\para1.pth')
+torch.save(model,'Packages\prune__\demo2\para1.pt')
 
 
 config_list = [{
@@ -53,9 +52,9 @@ from nni.compression.pytorch.speedup import ModelSpeedup
 ModelSpeedup(model, torch.rand(3, 1, 28, 28).to(device), masks).speedup_model()
 
 print(model)
-torch.save(model.state_dict(),'Packages\prune__\demo2\para2.pth')
+torch.save(model,'Packages\prune__\demo2\para2.pt')
 
 optimizer = SGD(model.parameters(), 1e-2)
 for epoch in range(3):
     trainer(model, optimizer, criterion)
-torch.save(model.state_dict(),'Packages\prune__\demo2\para3.pth')
+torch.save(model,'Packages\prune__\demo2\para3.pt')
