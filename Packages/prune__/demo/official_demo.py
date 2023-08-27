@@ -58,3 +58,8 @@ optimizer = SGD(model.parameters(), 1e-2)
 for epoch in range(3):
     trainer(model, optimizer, criterion)
 torch.save(model,'Packages\prune__\demo2\para3.pt')
+
+# inference 
+model.to(device=device)                                                       # ---将网络拷贝到deivce中--#
+model=torch.load('Packages\prune__\demo2\para3.pt',map_location=device)
+print(model)

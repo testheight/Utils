@@ -807,7 +807,7 @@ if __name__ =="__main__":
     # print(pred.shape)
 
     # print(net)
-    # y = mit(x)
+    # y = net(x)
     # print(y.shape)
     
     from thop import profile
